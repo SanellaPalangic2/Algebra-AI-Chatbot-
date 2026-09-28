@@ -1,0 +1,19 @@
+# Render Blueprint — lets Render set everything up from this file.
+# In Render: New + → Blueprint → pick this GitHub repo.
+services:
+  - type: web
+    name: algebra-quest
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 2 --threads 4 --timeout 120
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: ANTHROPIC_API_KEY
+        sync: false          # Render will ask you to paste your key
+      - key: SECRET_KEY
+        generateValue: true  # random value that signs the progress cookie
+      - key: ANTHROPIC_MODEL
+        value: claude-haiku-4-5-20251001
